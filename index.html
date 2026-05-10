@@ -4,583 +4,517 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>五維財富動力學｜個人資源盤點</title>
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:"Noto Sans TC",sans-serif;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Noto Sans TC", sans-serif;
     }
 
-    body{
-      background:linear-gradient(135deg,#f8fbff 0%,#eef7ff 100%);
-      color:#1e293b;
-      padding:32px;
+    body {
+      background: linear-gradient(135deg, #f8fbff 0%, #eef7ff 100%);
+      color: #1e293b;
+      padding: 32px;
     }
 
-    .container{
-      max-width:1400px;
-      margin:auto;
+    .container {
+      max-width: 1400px;
+      margin: auto;
     }
 
-    .hero{
-      background:white;
-      border-radius:20px;
-      padding:18px 22px;
-      box-shadow:0 8px 28px rgba(0,0,0,.05);
-      margin-bottom:14px;
-      position:sticky;
-      top:8px;
-      z-index:10;
+    .hero {
+      background: white;
+      border-radius: 20px;
+      padding: 18px 22px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.05);
+      margin-bottom: 14px;
+      position: sticky;
+      top: 8px;
+      z-index: 10;
+}
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg,#2563eb,#06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    h1{
-      font-size:2.5rem;
-      margin-bottom:12px;
-      background:linear-gradient(90deg,#2563eb,#06b6d4);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
+    .subtitle {
+      color: #64748b;
+      line-height: 1.8;
+      margin-bottom: 24px;
     }
 
-    .subtitle{
-      color:#64748b;
-      line-height:1.8;
-      margin-bottom:24px;
+    .top-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+}
+
+    .score-card {
+      background: linear-gradient(135deg,#ffffff,#f1f7ff);
+      border: 1px solid #dbeafe;
+      border-radius: 14px;
+      padding: 10px 12px;
+}
+
+    .score-title {
+      color: #64748b;
+      margin-bottom: 10px;
+      font-size: .95rem;
     }
 
-    .top-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-      gap:10px;
-      margin-bottom:14px;
+    .score-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #2563eb;
     }
 
-    .score-card{
-      background:linear-gradient(135deg,#ffffff,#f1f7ff);
-      border:1px solid #dbeafe;
-      border-radius:14px;
-      padding:10px 12px;
+    .section {
+      background: white;
+      border-radius: 28px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.05);
     }
 
-    .score-title{
-      color:#64748b;
-      margin-bottom:10px;
-      font-size:.95rem;
+    .section h2 {
+      margin-bottom: 24px;
+      color: #0f172a;
     }
 
-    .score-value{
-      font-size:2rem;
-      font-weight:800;
-      color:#2563eb;
+    .question {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 16px;
+      transition: .2s ease;
+      background: #fff;
     }
 
-    .section{
-      background:white;
-      border-radius:28px;
-      padding:32px;
-      margin-bottom:24px;
-      box-shadow:0 10px 40px rgba(0,0,0,.05);
+    .question:hover {
+      border-color: #93c5fd;
+      transform: translateY(-2px);
     }
 
-    .section h2{
-      margin-bottom:24px;
-      color:#0f172a;
+    .question p {
+      line-height: 1.8;
+      margin-bottom: 12px;
+      font-weight: 500;
     }
 
-    .question{
-      padding:18px;
-      border-radius:18px;
-      border:1px solid #e2e8f0;
-      margin-bottom:16px;
-      transition:.2s ease;
-      background:#fff;
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      font-size: 1rem;
+      background: #f8fafc;
     }
 
-    .question:hover{
-      border-color:#93c5fd;
-      transform:translateY(-2px);
+    .btn {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: linear-gradient(90deg,#2563eb,#06b6d4);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(37,99,235,.2);
     }
 
-    .question p{
-      line-height:1.8;
-      margin-bottom:12px;
-      font-weight:500;
+    .report {
+      display: none;
+      margin-top: 40px;
     }
 
-    select{
-      width:100%;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid #cbd5e1;
-      font-size:1rem;
-      background:#f8fafc;
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 32px;
     }
 
-    .btn{
-      border:none;
-      padding:10px 18px;
-      border-radius:12px;
-      background:linear-gradient(90deg,#2563eb,#06b6d4);
-      color:white;
-      font-size:1rem;
-      cursor:pointer;
-      font-weight:700;
-      box-shadow:0 6px 18px rgba(37,99,235,.2);
+    .report-card {
+      background: linear-gradient(135deg,#ffffff,#f8fbff);
+      border: 1px solid #dbeafe;
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 20px;
     }
 
-    .report{
-      display:none;
-      margin-top:40px;
+    .report-card h3 {
+      margin-bottom: 16px;
+      color: #1d4ed8;
     }
 
-    .report-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      flex-wrap:wrap;
-      gap:16px;
-      margin-bottom:32px;
+    .status {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-weight: 700;
     }
 
-    .report-card{
-      background:linear-gradient(135deg,#ffffff,#f8fbff);
-      border:1px solid #dbeafe;
-      border-radius:24px;
-      padding:28px;
-      margin-bottom:20px;
+    ul {
+      padding-left: 20px;
+      line-height: 2;
+      color: #334155;
     }
 
-    .report-card h3{
-      margin-bottom:16px;
-      color:#1d4ed8;
+    canvas {
+      max-width: 600px;
+      margin: 30px auto;
     }
 
-    .status{
-      display:inline-block;
-      margin-top:12px;
-      padding:8px 14px;
-      border-radius:999px;
-      background:#dbeafe;
-      color:#1d4ed8;
-      font-weight:700;
+    .footer-note {
+      margin-top: 40px;
+      text-align: center;
+      color: #64748b;
+      line-height: 1.8;
     }
 
-    ul{
-      padding-left:20px;
-      line-height:2;
-      color:#334155;
+    @media(max-width:768px){
+      body{padding:16px;}
+      .hero,.section{padding:24px;}
+      h1{font-size:2rem;}
     }
-
-    canvas{
-      max-width:600px;
-      margin:30px auto;
-    }
-
-    .footer-note{
-      margin-top:40px;
-      text-align:center;
-      color:#64748b;
-      line-height:1.8;
-    }
-
+    
     .mini-header{
-      position:fixed;
-      top:-100px;
-      left:50%;
-      transform:translateX(-50%);
-      width:calc(100% - 32px);
-      max-width:1200px;
-      background:rgba(255,255,255,.88);
-      backdrop-filter:blur(14px);
-      border:1px solid rgba(255,255,255,.5);
-      border-radius:18px;
-      padding:12px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      box-shadow:0 10px 30px rgba(0,0,0,.08);
-      z-index:999;
-      transition:all .35s ease;
-    }
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 1200px;
 
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(14px);
+
+      border: 1px solid rgba(255,255,255,.5);
+
+      border-radius: 18px;
+
+      padding: 12px 18px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+
+      z-index: 999;
+
+      transition: all .35s ease;
+    }
+    
     .mini-header.show{
-      top:12px;
+      top: 12px;
     }
 
     .mini-title{
-      font-size:1rem;
-      font-weight:800;
-      color:#0f172a;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
     }
-
     .mini-score{
-      font-weight:700;
-      color:#2563eb;
+      font-weight: 700;
+      color: #2563eb;
     }
-
     .mini-btn{
       border:none;
       padding:10px 16px;
       border-radius:12px;
-      background:linear-gradient(90deg,#2563eb,#06b6d4);
+
+      background: linear-gradient(90deg,#2563eb,#06b6d4);
+
       color:white;
       font-weight:700;
       cursor:pointer;
     }
-
-    .sub-dimension-box{
-      margin-top:24px;
-      background:#f8fbff;
-      border:1px solid #dbeafe;
-      border-radius:18px;
-      padding:18px;
-    }
-
-    .sub-dimension-box h4{
-      margin-bottom:18px;
-      color:#0f172a;
-    }
-
-    .sub-item{
-      margin-bottom:14px;
-      padding:14px;
-      background:white;
-      border-radius:14px;
-      border:1px solid #e2e8f0;
-    }
-
-    .sub-item-title{
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:8px;
-      font-weight:700;
-    }
-
-    .sub-bar{
-      width:100%;
-      height:10px;
-      background:#e2e8f0;
-      border-radius:999px;
-      overflow:hidden;
-    }
-
-    .sub-bar-fill{
-      height:100%;
-      border-radius:999px;
-      background:linear-gradient(90deg,#2563eb,#06b6d4);
-    }
-
-    @media(max-width:768px){
-      body{
-        padding:16px;
-      }
-
-      .hero,.section{
-        padding:24px;
-      }
-
-      h1{
-        font-size:2rem;
-      }
-
-      .mini-header{
-        width:calc(100% - 16px);
-      }
-    }
+    
   </style>
 </head>
-
 <body>
+  <div class="container">
 
-<div class="container">
+    <div class="hero">
+      <h1>五維財富動力學</h1>
+      <p class="subtitle">
+        個人資源盤點系統｜請使用者直接下拉選單點選分數，點擊"生成個人分析報告"查看結果。
+      </p>
 
-  <div class="hero">
-
-    <h1>五維財富動力學</h1>
-
-    <p class="subtitle">
-      個人資源盤點系統｜請使用者直接下拉選單點選分數，點擊「生成個人分析報告」查看結果。
-    </p>
-
-    <div class="top-grid">
-
-      <div class="score-card">
-        <div class="score-title">金錢 MONEY</div>
-        <div class="score-value" id="moneyScore">0.0</div>
-      </div>
-
-      <div class="score-card">
-        <div class="score-title">精力 ENERGY</div>
-        <div class="score-value" id="energyScore">0.0</div>
-      </div>
-
-      <div class="score-card">
-        <div class="score-title">時間 TIME</div>
-        <div class="score-value" id="timeScore">0.0</div>
-      </div>
-
-      <div class="score-card">
-        <div class="score-title">人脈 CONNECTIONS</div>
-        <div class="score-value" id="connectionScore">0.0</div>
-      </div>
-
-      <div class="score-card">
-        <div class="score-title">能力 CAPABILITY</div>
-        <div class="score-value" id="abilityScore">0.0</div>
-      </div>
-
-    </div>
-
-    <button class="btn" onclick="generateReport()">
-      生成個人分析報告
-    </button>
-
-  </div>
-
-  <div class="mini-header" id="miniHeader">
-
-    <div class="mini-title">
-      五維財富動力學
-    </div>
-
-    <div class="mini-score">
-      整體財富轉化效率：<span id="miniOverall">0.0</span>
-    </div>
-
-    <button class="mini-btn" onclick="generateReport()">
-      生成報告
-    </button>
-
-  </div>
-
-  <div id="questionContainer"></div>
-
-  <div class="report" id="reportSection">
-
-    <div class="section">
-
-      <div class="report-header">
-
-        <div>
-          <h2>個人深度分析報告</h2>
-          <p id="overallText"></p>
+      <div class="top-grid">
+        <div class="score-card">
+          <div class="score-title">金錢 MONEY</div>
+          <div class="score-value" id="moneyScore">0.0</div>
         </div>
 
+        <div class="score-card">
+          <div class="score-title">精力 ENERGY</div>
+          <div class="score-value" id="energyScore">0.0</div>
+        </div>
+
+        <div class="score-card">
+          <div class="score-title">時間 TIME</div>
+          <div class="score-value" id="timeScore">0.0</div>
+        </div>
+
+        <div class="score-card">
+          <div class="score-title">人脈 CONNECTIONS</div>
+          <div class="score-value" id="connectionScore">0.0</div>
+        </div>
+
+        <div class="score-card">
+          <div class="score-title">能力 CAPABILITY</div>
+          <div class="score-value" id="abilityScore">0.0</div>
+        </div>
       </div>
 
-      <canvas id="radarChart"></canvas>
-
-      <div id="reportCards"></div>
-
+      <button class="btn" onclick="generateReport()">生成個人分析報告</button>
     </div>
 
+    <div class="mini-header" id="miniHeader">
+      <div class="mini-title">
+        五維財富動力學
+      </div>
+      <div class="mini-score">
+        整體財富轉化效率：<span id="miniOverall">0.0</span>
+      </div>
+
+      <button class="mini-btn" onclick="generateReport()">
+        生成報告
+      </button>
+    </div>
+    
+    <div id="questionContainer"></div>
+
+    <div class="report" id="reportSection">
+      <div class="section">
+        <div class="report-header">
+          <div>
+            <h2>個人深度分析報告</h2>
+            <p id="overallText"></p>
+          </div>
+        </div>
+
+        <canvas id="radarChart"></canvas>
+
+        <div id="reportCards"></div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      五維財富動力學 © 2026 ｜ Global ESG Leadership Organization
+    </div>
   </div>
 
-  <div class="footer-note">
-    五維財富動力學 © 2026 ｜ Global ESG Leadership Organization
-  </div>
-
-</div>
-
-<script>
-
-const dimensions = {
-  money:{
-    title:"金錢 MONEY",
-    description:"財務安全、資產增值與金流管理能力",
-
+  <script>
+    const dimensions = {
+  "money": {
+    "title": "金錢 MONEY",
+    "description": "財務安全、資產增值與金流管理能力",
     subDimensions:{
-      "財務安全":[0,1,2,3],
-      "消費與金流":[4,5,6,7],
-      "資產增值":[8,9,10,11],
-      "財務決策":[12,13,14,15],
-      "財富藍圖":[16,17,18,19]
-    },
-
-    questions:[
+      '財務安全基礎':[0,1,2,3],
+      '支出決策品質':[4,5,6,7],
+      '資產增值':[8,9,10,11],
+      '財務決策品質':[12,13,14,15],
+      '財務目標清晰度':[16,17,18,19]
+          },
+    "questions": [
       "我每個月固定將收入的20%以上，在花費之前就先撥入儲蓄或投資帳戶",
       "如果明天失去工作，現有流動資金可以維持正常生活超過12個月",
       "我清楚知道自己每個月固定支出的總金額，誤差在10%以內",
       "我有一筆獨立的緊急備用金（至少3個月支出），從未在非緊急情況下動用過",
-
       "花費超過月收入5%的金額之前，我會評估長期回報，而不只是當下的滿足感",
       "上個月的支出清單中，「投資型支出」（提升能力、效率或系統）超過10%",
       "我能清楚識別哪些消費是真正需求，哪些是為維持形象或跟隨他人而產生的",
       "我每年花費相當於至少一個月收入在提升自己的學習、能力或工具系統上",
-
       "我有至少一個不依賴我主動工作時間的收入來源（投資收益、版稅、租金等）",
       "我的被動收入每個月超過我月支出的10%以上",
       "我清楚知道自己主要投資的年化回報率，並且每季至少檢視一次",
       "過去兩年，我的總資產淨值增長幅度超過了生活費用的增長幅度",
-
       "我很少因為「限時優惠」「別人都在買」或一時衝動，做出超出計劃的重大消費決定",
       "過去一年，我沒有因為情緒（壓力、興奮、焦慮）做出後來感到後悔的重大財務決定",
       "面對投資機會時，我會主動尋找「可能出錯的地方」，而不是只看潛在收益",
       "我每年至少做一次完整的財務盤點，了解自己的資產、負債和現金流狀況",
-
-      "我有一個具體的「財務自由數字」",
-      "我的財務計劃有具體年度目標與路徑",
-      "過去一年，我的財富增長速度讓我感到滿意",
-      "我的伴侶或家人了解我的財務狀況和計劃"
+      "我有一個具體的「財務自由數字」（不依賴工作也能維持生活的資產金額），並定期追蹤進度",
+      "我的財務計劃不只是「希望多存一點錢」，而是有具體的年度目標和達成路徑",
+      "過去一年，我的財富增長速度讓我感到滿意，正在朝著財務自由的方向前進",
+      "我的伴侶或家人了解我的財務狀況和計劃，不存在因資訊不透明產生的摩擦"
     ]
   },
-
-  energy:{
-    title:"精力 ENERGY",
-    description:"體能、情緒與恢復能力",
-
-    subDimensions:{
-      "身體恢復":[0,1,2,3],
-      "專注與認知":[4,5,6,7],
-      "情緒韌性":[8,9,10,11],
-      "恢復循環":[12,13,14,15],
-      "人生平衡":[16,17,18,19]
-    },
-
-    questions:new Array(20).fill("請依據你的真實狀態進行評分")
+  "energy": {
+    "title": "精力 ENERGY",
+    "description": "體能、情緒與恢復能力",
+    "questions": [
+      "我一週有4天以上，早晨醒來時感到精力充沛，不需要鬧鐘多次才能起床",
+      "我一週有3天以上可以睡滿7-8小時，且不靠藥物或酒精輔助",
+      "我每週至少進行3次、每次30分鐘以上的有氧或肌力運動",
+      "我的日常飲食穩定，不靠咖啡因、高糖食物或提神飲料撐過下午的工作",
+      "下午三點後，我仍能保持清晰的思維和判斷力，不感到明顯的思維遲緩或決策疲勞",
+      "每週我有至少3個時段，能進入完全不受打擾的深度專注狀態，每次超過60分鐘",
+      "我知道自己一天中認知能力最強的時段（高峰期），並有意識地把重要決策安排在那時",
+      "工作結束後，我通常仍有足夠精力陪伴家人、進行個人興趣或做重要的私人決策",
+      "面臨超出預期的壓力或突發狀況時，通常能在48小時內恢復到穩定的工作狀態",
+      "我能清楚識別哪些特定的人、事、環境讓我精力大量消耗，並主動減少不必要的接觸",
+      "一週之中，我感到「情緒內耗」（做了很多但感覺毫無意義）的時間不超過兩天",
+      "我很少因為過去的決定或未來的擔憂，在工作時間消耗大量的心理能量",
+      "週末或假日，我能真正切斷工作模式（不查郵件、不回非緊急訊息）至少連續24小時",
+      "我有至少一項固定的恢復儀式（如每天早晨散步、每週日完全不工作），持續超過3個月",
+      "連續高強度工作一週後，我會主動安排恢復時間，而不是撐到崩潰才停下來",
+      "我一年有至少兩次，能夠完全脫離工作超過5天的真正休假（不帶電腦或不查工作訊息）",
+      "我目前每天所做的大部分工作，讓我感到有意義，而不只是在完成別人的要求",
+      "當我遇到重大挫折或失敗時，通常能在一週內恢復動力，繼續前進",
+      "回顧過去半年，我的整體精力水平是穩定或在提升的，而非持續感到耗竭",
+      "在事業、健康、家庭、個人成長這幾個領域，我感到大致平衡，而非嚴重偏廢"
+    ]
   },
-
-  time:{
-    title:"時間 TIME",
-    description:"時間主權、深度工作與優先順序管理",
-
-    subDimensions:{
-      "時間主權":[0,1,2,3],
-      "深度工作":[4,5,6,7],
-      "授權系統":[8,9,10,11],
-      "高價值配置":[12,13,14,15],
-      "節奏管理":[16,17,18,19]
-    },
-
-    questions:new Array(20).fill("請依據你的真實狀態進行評分")
+  "time": {
+    "title": "時間 TIME",
+    "description": "時間主權、深度工作與優先順序管理",
+    "questions": [
+      "回顧上週，行事曆上超過50%的時間是我主動規劃和安排的，而非被他人的請求填滿",
+      "當別人臨時要求非緊急的會議或幫助時，我有能力延遲或婉拒，而不會立刻答應",
+      "我每週會花至少15分鐘，主動規劃下週的重要時間塊，而不只是被動地回應行事曆",
+      "過去一個月，我至少有一次對不符合我優先級的請求說了「不」或「目前無法」",
+      "每週我有至少3個90分鐘以上的深度工作時段，期間不查看手機、郵件或訊息",
+      "進入深度工作狀態時，我能在15分鐘內進入高度專注，不需要很長的暖機時間",
+      "我知道自己每天認知能力的高峰時段，並有意識地將最重要的工作安排在那時",
+      "過去一個月，深度工作時間佔我總工作時間的比例在30%以上",
+      "我的日常事務中，有至少20%是由他人（助理、外包、工具）完成的，而非我親自處理",
+      "我計算過自己的「隱性時薪」，並根據這個數字決定哪些事值得外包給別人",
+      "在交出一項任務後，我能放心讓對方完成，不需要過度跟進或頻繁確認細節",
+      "過去一年，我把至少一項原本自己做的固定工作成功外包或自動化",
+      "回顧上週，我花在「只有我能做的高影響力工作」上的時間超過30%",
+      "我很少在週末後悔，覺得那週的時間沒有花在真正重要的地方",
+      "我能清楚說出本週對我未來影響最大的一件事，而且那件事真的進入了我的行事曆",
+      "我的工作日裡，花在響應他人需求（回訊息、出席被動會議）的時間不超過40%",
+      "我大致清楚自己一天的時間去哪了，而不是常常感到「不知道時間去哪了」",
+      "我每個月都有追蹤或回顧自己時間分配的習慣，哪怕只是非正式地回想一下",
+      "過去三個月，我的深度工作時間是增加的，而不是被各種事務持續壓縮",
+      "我在工作日有意識地設定「斷線時間」（不查手機或訊息的時段），至少每天一次"
+    ]
   },
-
-  connections:{
-    title:"人脈 CONNECTIONS",
-    description:"人際資本、合作資源與網絡效益",
-
-    subDimensions:{
-      "核心支持":[0,1,2,3],
-      "圈層多元":[4,5,6,7],
-      "關係維護":[8,9,10,11],
-      "價值交換":[12,13,14,15],
-      "聲望影響":[16,17,18,19]
-    },
-
-    questions:new Array(20).fill("請依據你的真實狀態進行評分")
+  "connections": {
+    "title": "人脈 CONNECTIONS",
+    "description": "人際資本、合作資源與網絡效益",
+    "questions": [
+      "我有至少8個人，在我今天打電話說「我需要幫忙」時，對方會認真回應並提供實質協助",
+      "我的人脈中，有至少3個人曾在重要場合主動為我背書、引薦或創造機會",
+      "過去一年，我通過人脈關係獲得了至少1個重要的機會、合作或資源（非靠自己主動找到）",
+      "我認識的人中，有至少2個能直接接觸到我下一個目標所在領域的關鍵人物",
+      "我的人脈涵蓋至少5個不同的行業或領域，而不是幾乎全部集中在自己的專業圈子",
+      "我的人脈中有至少3個人，其職位或影響力明顯高於我目前的層級",
+      "過去半年，我主動認識了至少2個來自我原本不熟悉的行業或背景的新朋友",
+      "我知道自己的人脈在哪些行業或層級有明顯空白，並認識到這是需要改善的地方",
+      "過去一個月，我主動聯繫了至少3個有一段時間沒有互動的舊聯絡人",
+      "我有定期維護重要人脈的習慣（例如每季聯繫一次），而不只是等對方主動",
+      "當我認識一個值得深交的新朋友後，通常會在一週內主動跟進，而不是等待緣分",
+      "在重要人脈關係上的投入是持續且主動的，而非只在需要時才付出",
+      "建立新關係時，我通常能具體說出自己能為對方帶來什麼價值，而不只是希望對方幫助我",
+      "我是某兩個原本不相連的圈子之間的橋樑，定期把不同背景的人相互介紹",
+      "如果我今天辭職或關閉公司，我相信大部分核心人脈關係不會因此消失",
+      "我有一個非正式的「個人顧問委員會」，至少5個人，在重大決策時可以諮詢他們",
+      "過去一年，有至少一次意外的機會，是通過一個我平常不常聯絡的「弱連結」帶來的",
+      "我認識的人中，有不少人清楚知道我目前的目標，會在合適時機主動為我引薦",
+      "在我的社群或圈子裡，我有一定的聲望，讓人一想到特定需求就會想到我",
+      "我的人脈質量在過去一年有明顯提升，不只是數量，而是關係深度和多元性都在改善"
+    ]
   },
-
-  ability:{
-    title:"能力 CAPABILITY",
-    description:"專業能力、學習成長與差異化優勢",
-
-    subDimensions:{
-      "市場價值":[0,1,2,3],
-      "商業化能力":[4,5,6,7],
-      "槓桿能力":[8,9,10,11],
-      "學習成長":[12,13,14,15],
-      "差異化定位":[16,17,18,19]
-    },
-
-    questions:new Array(20).fill("請依據你的真實狀態進行評分")
+  "ability": {
+    "title": "能力 CAPABILITY",
+    "description": "專業能力、學習成長與差異化優勢",
+    "questions": [
+      "我能在3分鐘內，向一個不熟悉我行業的人清楚解釋我的能力解決什麼問題、帶來什麼結果",
+      "在我的專業領域，我有信心自己的知識和技能達到市場前20%的水平（有客觀依據）",
+      "過去一年，我的專業知識或技能有實質性的深化，而不是停留在三年前的水平",
+      "市場上有人曾主動尋找我的專業意見或服務，而非只有我主動推銷時才有人需要我",
+      "我能清楚說出自己核心服務或能力的市場定價，且這個定價是基於市場調研的",
+      "過去一年，我有主動創造至少一個將自己能力商業化的新嘗試（新服務、新客戶、新合作）",
+      "我的收入談判能力讓我感到獲得了合理回報，而不是常常覺得被低估或不敢開口要價",
+      "我能把自己的能力清楚包裝成一個「解決方案」，讓客戶或雇主一看就明白它的價值",
+      "我的收入中，有部分不需要我一對一親自投入時間就能產生（課程、諮詢包、工具、內容等）",
+      "我有至少一個「知識資產」（文章系列、課程、工具、書籍、模板），可以在我不在場時繼續創造價值",
+      "過去一年，我的時間投入與收入的比例有往更高槓桿的方向移動",
+      "如果今天想要服務10倍的客戶或受眾，我知道大概需要做什麼，而不是完全無從下手",
+      "我每個月至少花10小時在有計劃的學習上（書籍、課程、向導師請教），而不只是碎片化資訊",
+      "過去一年，我學習了至少一個全新的技能，而不只是在既有領域繼續加深",
+      "我能快速識別哪些新技能對我未來目標最有價值，而不是隨機或跟風地學習",
+      "我定期向比自己更強的人請教或學習，而不只是在自己的舒適圈內交流",
+      "在我的行業或目標市場中，有人會主動推薦我，因為我在某特定領域有清晰的專業定位",
+      "我能清楚說出自己與同水平競爭者的3個差異化優勢，而不感覺自己和別人差不多",
+      "我的能力放到一個完全不同的行業，仍然可以創造顯著的價值（有明確的知識套利空間）",
+      "我對未來3年的能力發展有清晰計劃，包括要學什麼、要停止什麼、以及如何提升槓桿"
+    ]
   }
 };
 
-const questionContainer = document.getElementById("questionContainer");
+const questionContainer = document.getElementById('questionContainer');
 
-Object.keys(dimensions).forEach(key=>{
+    Object.keys(dimensions).forEach(key => {
+      const section = document.createElement('div');
+      section.className = 'section';
 
-  const section=document.createElement("div");
-  section.className="section";
+      section.innerHTML = `
+        <h2>${dimensions[key].title}</h2>
+        <p style="color:#64748b;margin-bottom:24px;">${dimensions[key].description}</p>
+      `;
 
-  section.innerHTML=`
-    <h2>${dimensions[key].title}</h2>
-    <p style="color:#64748b;margin-bottom:24px;">
-      ${dimensions[key].description}
-    </p>
-  `;
+      dimensions[key].questions.forEach((q,index) => {
+        const question = document.createElement('div');
+        question.className = 'question';
 
-  dimensions[key].questions.forEach((q,index)=>{
+        question.innerHTML = `
+          <p>${index + 1}. ${q}</p>
+          <select data-dimension="${key}">
+            <option value="">請選擇評分</option>
+            <option value="1">1｜幾乎從不</option>
+            <option value="2">2｜偶爾</option>
+            <option value="3">3｜有時</option>
+            <option value="4">4｜經常</option>
+            <option value="5">5｜總是</option>
+          </select>
+        `;
 
-    const question=document.createElement("div");
-    question.className="question";
+        section.appendChild(question);
+      });
 
-    question.innerHTML=`
-      <p>${index+1}. ${q}</p>
+      questionContainer.appendChild(section);
+    });
 
-      <select data-dimension="${key}" data-index="${index}">
-        <option value="">請選擇評分</option>
-        <option value="1">1｜幾乎從不</option>
-        <option value="2">2｜偶爾</option>
-        <option value="3">3｜有時</option>
-        <option value="4">4｜經常</option>
-        <option value="5">5｜總是</option>
-      </select>
-    `;
+    function calculateDimension(key){
+      const selects = document.querySelectorAll(`select[data-dimension="${key}"]`);
+      let total = 0;
+      let count = 0;
 
-    section.appendChild(question);
+      selects.forEach(select => {
+        if(select.value !== ''){
+          total += Number(select.value);
+          count++;
+        }
+      });
 
-  });
-
-  questionContainer.appendChild(section);
-
-});
-
-function calculateDimension(key){
-
-  const selects=document.querySelectorAll(`select[data-dimension="${key}"]`);
-
-  let total=0;
-  let count=0;
-
-  selects.forEach(select=>{
-
-    if(select.value!==""){
-      total+=Number(select.value);
-      count++;
+      if(count === 0) return 0;
+      return ((total / count) * 2).toFixed(1);
     }
 
-  });
-
-  if(count===0) return 0;
-
-  return ((total/count)*2).toFixed(1);
-}
-
-function calculateSubDimension(key,indexes){
-
-  let total=0;
-  let count=0;
-
-  indexes.forEach(i=>{
-
-    const select=document.querySelector(
-      `select[data-dimension="${key}"][data-index="${i}"]`
-    );
-
-    if(select && select.value!==""){
-      total+=Number(select.value);
-      count++;
+    function getLevel(score){
+      if(score < 4.5) return '▼ 系統瓶頸';
+      if(score < 6.5) return '◆ 待提升';
+      if(score < 8.5) return '● 良好基礎';
+      return '★ 槓桿資產';
     }
-
-  });
-
-  if(count===0) return 0;
-
-  return ((total/count)*2).toFixed(1);
-}
-
-function getLevel(score){
-
-  if(score<4.5) return "▼ 系統瓶頸";
-  if(score<6.5) return "◆ 待提升";
-  if(score<8.5) return "● 良好基礎";
-
-  return "★ 槓桿資產";
-}
 
     function getAdvice(key, score) {
       const adviceMap = {
@@ -761,166 +695,110 @@ function getLevel(score){
       return adviceMap[key][level];
       };
 
-let radarChart;
+    let radarChart;
 
-function generateReport(){
+    function generateReport(){
+      const scores = {
+        money: Number(calculateDimension('money')),
+        energy: Number(calculateDimension('energy')),
+        time: Number(calculateDimension('time')),
+        connections: Number(calculateDimension('connections')),
+        ability: Number(calculateDimension('ability')),
+      };
 
-  const scores={
-    money:Number(calculateDimension("money")),
-    energy:Number(calculateDimension("energy")),
-    time:Number(calculateDimension("time")),
-    connections:Number(calculateDimension("connections")),
-    ability:Number(calculateDimension("ability"))
-  };
+      document.getElementById('moneyScore').innerText = scores.money;
+      document.getElementById('energyScore').innerText = scores.energy;
+      document.getElementById('timeScore').innerText = scores.time;
+      document.getElementById('connectionScore').innerText = scores.connections;
+      document.getElementById('abilityScore').innerText = scores.ability;
 
-  document.getElementById("moneyScore").innerText=scores.money;
-  document.getElementById("energyScore").innerText=scores.energy;
-  document.getElementById("timeScore").innerText=scores.time;
-  document.getElementById("connectionScore").innerText=scores.connections;
-  document.getElementById("abilityScore").innerText=scores.ability;
+      const overall = (
+        (scores.money + scores.energy + scores.time + scores.connections + scores.ability) / 5
+      ).toFixed(1);
 
-  const overall=((
+      document.getElementById('miniOverall').innerText = overall;
 
-    scores.money+
-    scores.energy+
-    scores.time+
-    scores.connections+
-    scores.ability
-
-  )/5).toFixed(1);
-
-  document.getElementById("miniOverall").innerText=overall;
-
-  document.getElementById("overallText").innerHTML=`
-    整體財富轉化效率：
-    <strong>${overall} / 10</strong>
-  `;
-
-  const reportCards=document.getElementById("reportCards");
-
-  reportCards.innerHTML="";
-
-  Object.keys(scores).forEach(key=>{
-
-    const card=document.createElement("div");
-
-    card.className="report-card";
-
-    let subHTML="";
-
-    Object.entries(dimensions[key].subDimensions).forEach(([subName,indexes])=>{
-
-      const subScore=calculateSubDimension(key,indexes);
-
-      subHTML+=`
-        <div class="sub-item">
-
-          <div class="sub-item-title">
-            <span>${subName}</span>
-            <span>${subScore} / 10</span>
-          </div>
-
-          <div class="sub-bar">
-            <div
-              class="sub-bar-fill"
-              style="width:${subScore*10}%">
-            </div>
-          </div>
-
-        </div>
+      document.getElementById('overallText').innerHTML = `
+        整體財富轉化效率：<strong>${overall} / 10</strong>
       `;
-    });
 
-    card.innerHTML=`
-      <h3>${dimensions[key].title}</h3>
+      const reportCards = document.getElementById('reportCards');
+      reportCards.innerHTML = '';
 
-      <p>
-        <strong>總分：</strong>
-        ${scores[key]} / 10
-      </p>
+      Object.keys(scores).forEach(key => {
+        const card = document.createElement('div');
+        card.className = 'report-card';
 
-      <div class="status">
-        ${getLevel(scores[key])}
-      </div>
+        card.innerHTML = `
+          <h3>${dimensions[key].title}</h3>
+          <p><strong>得分：</strong>${scores[key]} / 10</p>
+          <div class="status">${getLevel(scores[key])}</div>
 
-      <div class="sub-dimension-box">
+          <div style="margin-top:20px;">
+            <h4 style="margin-bottom:12px;">優先行動建議</h4>
+            <ul>
+              ${getAdvice(key,scores[key]).map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+        `;
 
-        <h4>子維度分析</h4>
+        reportCards.appendChild(card);
+      });
 
-        ${subHTML}
+      document.getElementById('reportSection').style.display = 'block';
 
-      </div>
-    `;
+      const ctx = document.getElementById('radarChart');
 
-    reportCards.appendChild(card);
+      if(radarChart){
+        radarChart.destroy();
+      }
 
-  });
-
-  document.getElementById("reportSection").style.display="block";
-
-  const ctx=document.getElementById("radarChart");
-
-  if(radarChart){
-    radarChart.destroy();
-  }
-
-  radarChart=new Chart(ctx,{
-    type:"radar",
-
-    data:{
-      labels:["金錢","精力","時間","人脈","能力"],
-
-      datasets:[{
-        label:"五維財富評分",
-
-        data:[
-          scores.money,
-          scores.energy,
-          scores.time,
-          scores.connections,
-          scores.ability
-        ],
-
-        fill:true
-      }]
-    },
-
-    options:{
-      responsive:true,
-
-      scales:{
-        r:{
-          min:0,
-          max:10,
-
-          ticks:{
-            stepSize:2
+      radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['金錢','精力','時間','人脈','能力'],
+          datasets: [{
+            label: '五維財富評分',
+            data: [
+              scores.money,
+              scores.energy,
+              scores.time,
+              scores.connections,
+              scores.ability
+            ],
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            r: {
+              min: 0,
+              max: 10,
+              ticks: {
+                stepSize: 2
+              }
+            }
           }
         }
-      }
+      });
+
+      document.getElementById('radarChart').scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
     }
-  });
+    const miniHeader = document.getElementById('miniHeader');
 
-  document.getElementById("radarChart").scrollIntoView({
-    behavior:"smooth",
-    block:"center"
-  });
+    window.addEventListener('scroll', () => {
 
-}
+      if(window.scrollY > 280){
+        miniHeader.classList.add('show');
+      } else {
+        miniHeader.classList.remove('show');
+      }
 
-const miniHeader=document.getElementById("miniHeader");
-
-window.addEventListener("scroll",()=>{
-
-  if(window.scrollY>280){
-    miniHeader.classList.add("show");
-  }else{
-    miniHeader.classList.remove("show");
-  }
-
-});
-
-</script>
-
+    });
+  </script>
 </body>
 </html>
